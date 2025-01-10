@@ -40,6 +40,7 @@ username: githubuser
 password: test
 
 Admin login is not acessible to the public however here are some screenshots that show the admin view:
+
 **Users**
 ![Users Dashboard](/users.png)
 **Criminals**
