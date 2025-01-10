@@ -690,4 +690,4 @@ def update_criminal():
     return redirect(url_for('admin_criminal'))
 
 if __name__ == "__main__":
-	app.run('127.0.0.1', 5000, debug = True)
+	app.run(port=5000, debug = True)
