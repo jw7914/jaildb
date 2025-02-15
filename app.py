@@ -241,8 +241,8 @@ def officer_home(badge_number):
             "officer_site" : "private_probation.html"
         },
         "Arrest" : {
-            "badge_check" : " ARREST ON OFFICER.badge_number = arrest.badge_number WHERE arrest.badge_number = %s AND OFFICER.badge_number = %s;",
-            "criminal_query" : "SELECT CRIMINAL.criminal_first, CRIMINAL.criminal_last FROM CRIMINAL INNER JOIN arrest ON arrest.criminal_id = CRIMINAL.criminal_id WHERE arrest.criminal_id = %s AND CRIMINAL.criminal_id = %s;",
+            "badge_check" : " ARREST ON OFFICER.badge_number = ARREST.badge_number WHERE ARREST.badge_number = %s AND OFFICER.badge_number = %s;",
+            "criminal_query" : "SELECT CRIMINAL.criminal_first, CRIMINAL.criminal_last FROM CRIMINAL INNER JOIN ARREST ON ARREST.criminal_id = CRIMINAL.criminal_id WHERE ARREST.criminal_id = %s AND CRIMINAL.criminal_id = %s;",
             "officer_site" : "private_arrest.html"
         }
     }
@@ -688,6 +688,23 @@ def update_criminal():
     conn.commit()
     cursor.close()
     return redirect(url_for('admin_criminal'))
+
+@app.route('/ping')
+def ping():
+    connection = connectDB()
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM OFFICER")  
+                connection.commit()
+            return "DB Connection Active", 200
+        except pymysql.MySQLError as e:
+            return f"Error querying the database: {e}", 500
+        finally:
+            connection.close()
+    else:
+        return "Error connecting to the database", 500
 
 if __name__ == "__main__":
 	app.run(port=5000, debug = True)
